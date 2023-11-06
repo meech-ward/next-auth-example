@@ -6,16 +6,31 @@ import { userPostsQuery } from "@/db/queries/postsFeed"
 
 import Profile from "./profile"
 
-export default async function ProfilePage() {
-  const userId = "user-1"
+import { auth, signOut } from "@/auth"
 
-  const user = await db.select().from(usersTable).where(eq(usersTable.id, userId)).then(res => res[0])
-  const posts = await userPostsQuery.execute({ userId: user.id })
+import { redirect } from "next/navigation"
+
+import SignoutButton from "./sign-out-button"
+
+export default async function ProfilePage() {
+  const session = await auth()
+
+  if (!session?.user) {
+    redirect("/api/auth/signin?callbackUrl=/me")
+  }
+
+  const posts = await userPostsQuery.execute({ userId: session.user.id })
 
   return (
     <>
-      <Profile user={user} />
+      <Profile user={session.user} />
 
+        <SignoutButton
+          signOut={async () => {
+            "use server"
+            await signOut({redirectTo: "/"})
+          }}
+        />
       <div className="mt-7">
         <div className="w-full border-b mb-5">
           <div className="mb-2">Posts</div>

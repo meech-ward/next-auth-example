@@ -10,6 +10,8 @@ import { db, sql } from "@/db"
 import { posts as postsTable } from "@/db/schema/posts"
 import { users as usersTable } from "@/db/schema/users"
 
+import { auth } from "@/auth"
+
 const CreateSchema = z.object({
   content: z.string(),
 })
@@ -17,7 +19,11 @@ type CreateSchema = z.infer<typeof CreateSchema>
 export const createPost = action(CreateSchema, _createPost)
 
 async function _createPost({ content }: CreateSchema) {
-  const userId = "user-1"
+  const session = await auth()
+
+  if (!session) {
+    return { message: "not authenticated" }
+  }
 
 
   if (content.length < 3) {
@@ -26,7 +32,7 @@ async function _createPost({ content }: CreateSchema) {
 
   await db.insert(postsTable).values({
     content,
-    userId,
+    userId: session.user.id,
   })
 
   revalidatePath('/')

@@ -6,7 +6,7 @@ export default async function Profile({
 }: {
   user: {
     name?: string | null
-    username?: string | null
+    email?: string | null
     image?: string | null
   }
 }) {
@@ -14,7 +14,7 @@ export default async function Profile({
     <div className="flex justify-between">
       <div>
         <h2 className="text-3xl font-semibold">{user.name}</h2>
-        <div>{user.username}</div>
+        <div>{user.email}</div>
       </div>
       <Link href={user.image || "https://www.gravatar.com/avatar/?d=mp"}>
         <div className="rounded-full h-20 w-20 overflow-hidden relative">

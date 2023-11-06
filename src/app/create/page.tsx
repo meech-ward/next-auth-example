@@ -3,10 +3,15 @@ import CreatePostForm from "@/app/create/create-post-form"
 import { db, eq } from "@/db"
 import { users as usersTable } from "@/db/schema/users"
 
-export default async function Create() {
-  const userId = "user-1"
+import { auth } from "@/auth"
 
-  const user = await db.select().from(usersTable).where(eq(usersTable.id, userId)).then(res => res[0])
-  
-  return <CreatePostForm user={user} />
+import { redirect } from "next/navigation"
+
+export default async function Create() {
+  const session = await auth()
+  if (!session?.user) {
+    redirect("/api/auth/signin?callbackUrl=/create")
+  }
+
+  return <CreatePostForm user={session.user} />
 }

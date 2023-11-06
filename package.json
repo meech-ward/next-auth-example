@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "sst bind next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@auth/core": "^0.18.0",
     "@auth/drizzle-adapter": "^0.3.5",
+    "@babel/core": "^7.23.2",
     "@libsql/client": "^0.3.6",
     "@neondatabase/serverless": "^0.6.0",
     "@types/node": "20.6.2",
@@ -39,6 +40,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.19.13"
+    "drizzle-kit": "^0.19.13",
+    "sst": "^2.34.7",
+    "aws-cdk-lib": "2.101.1",
+    "constructs": "10.2.69"
   }
 }

@@ -2,6 +2,8 @@ import FeedPost from "@/components/feed-post"
 
 import { postsFeedQuery } from "@/db/queries/postsFeed"
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const posts = await postsFeedQuery.execute()
 

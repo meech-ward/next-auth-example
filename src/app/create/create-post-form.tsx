@@ -4,13 +4,16 @@ import Image from "next/image"
 
 import { twMerge } from "tailwind-merge"
 
-import { createPost } from "./actions"
-
 import { useState } from "react"
 
 import { useAction } from "next-safe-action/hook"
 
-export default function CreatePostForm({ user }: { user: { name?: string | null; image?: string | null } }) {
+import { CreatePostFunction } from "./actions"
+
+import { useRouter } from 'next/navigation'
+
+export default function CreatePostForm({ user, createPost }: { createPost: CreatePostFunction, user: { name?: string | null; image?: string | null } }) {
+  const router = useRouter()
   const { execute, result, status } = useAction(createPost)
 
   const [content, setContent] = useState("")
@@ -20,8 +23,15 @@ export default function CreatePostForm({ user }: { user: { name?: string | null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const result = await execute({ content })
-    console.log(result)
+    try {
+      const result = await execute({ content })
+      console.log(result)
+    } catch (error) {
+      console.error(error)
+      console.log("might just be an sst error")
+    } finally {
+      router.push('/')
+    }
   }
 
   return (
